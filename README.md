@@ -1,4 +1,4 @@
-# SEOExtractHF
+# SEOExtract
 
 <div align="center">
 
@@ -53,7 +53,7 @@ pip install -e .
 
 # Google Safe Browsing Setup
 
-SEOExtractHF checks every website against Google's Safe Browsing service **before crawling**.
+SEOExtract checks every website against Google's Safe Browsing service **before crawling**.
 
 If Google reports the website as unsafe, crawling is stopped automatically.
 
@@ -74,7 +74,7 @@ Add your API key.
 GOOGLE_SAFE_BROWSING_API_KEY=YOUR_API_KEY
 ```
 
-SEOExtractHF automatically loads the API key.
+SEOExtract automatically loads the API key.
 
 No additional code is required.
 
@@ -100,7 +100,7 @@ When an API key is supplied manually, the `.env` file is **not used**.
 # Quick Start
 
 ```python
-from seoextracthf import SEOExtract
+from seoextract import SEOExtract
 
 result = SEOExtract.audit(
     "https://example.com"
@@ -113,7 +113,7 @@ print(result.model_dump_json(indent=2))
 
 # Returned Object
 
-SEOExtractHF returns a validated Pydantic model.
+SEOExtract returns a validated Pydantic model.
 
 ```text
 AuditResult
