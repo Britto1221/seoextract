@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+seoextract/__init__.py
+seoextract/crawler.py
+seoextract/init.py
+seoextract/models.py
+seoextract/parser.py
+seoextract/rules.py
+seoextract/safe_browsing.py
+seoextract/scorer.py
+seoextract.egg-info/PKG-INFO
+seoextract.egg-info/SOURCES.txt
+seoextract.egg-info/dependency_links.txt
+seoextract.egg-info/requires.txt
+seoextract.egg-info/top_level.txt

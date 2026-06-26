@@ -57,6 +57,7 @@ SEOExtractHF checks every website against Google's Safe Browsing service **befor
 
 If Google reports the website as unsafe, crawling is stopped automatically.
 
+If no Google Safe Browsing API key is provided, safe_browsing.is_safe will be None.
 ---
 
 ## Option 1 (Recommended)
