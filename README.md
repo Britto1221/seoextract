@@ -1,0 +1,280 @@
+# SEOExtractHF
+
+<div align="center">
+
+**A lightweight Python SEO audit engine with built-in Google Safe Browsing support.**
+
+Returns validated **Pydantic structured output** that can be directly consumed by AI agents, dashboards, APIs, report generators, and automation pipelines.
+
+</div>
+
+---
+
+## Features
+
+- Website crawler
+- Google Safe Browsing validation
+- Technical SEO auditing
+- Pydantic structured output
+- Page-level SEO metrics
+- Site-level SEO scoring
+- Severity-based issue detection
+- Duplicate title detection
+- Duplicate meta description detection
+- Canonical tag detection
+- Viewport detection
+- Schema.org detection
+- Image alt-text validation
+- Internal linking analysis
+- Thin content detection
+
+---
+
+# Installation
+
+```bash
+pip install seoextracthf
+```
+
+or install from source
+
+```bash
+pip install -e .
+```
+
+---
+
+# Requirements
+
+- Python 3.10+
+- Google Safe Browsing API Key
+
+---
+
+# Google Safe Browsing Setup
+
+SEOExtractHF checks every website against Google's Safe Browsing service **before crawling**.
+
+If Google reports the website as unsafe, crawling is stopped automatically.
+
+---
+
+## Option 1 (Recommended)
+
+Create a `.env` file.
+
+```text
+.env
+```
+
+Add your API key.
+
+```env
+GOOGLE_SAFE_BROWSING_API_KEY=YOUR_API_KEY
+```
+
+SEOExtractHF automatically loads the API key.
+
+No additional code is required.
+
+---
+
+## Option 2
+
+Pass the API key manually.
+
+```python
+from seoextracthf import SEOExtract
+
+result = SEOExtract.audit(
+    "https://example.com",
+    safe_browsing_api_key="YOUR_API_KEY"
+)
+```
+
+When an API key is supplied manually, the `.env` file is **not used**.
+
+---
+
+# Quick Start
+
+```python
+from seoextracthf import SEOExtract
+
+result = SEOExtract.audit(
+    "https://example.com"
+)
+
+print(result.model_dump_json(indent=2))
+```
+
+---
+
+# Returned Object
+
+SEOExtractHF returns a validated Pydantic model.
+
+```text
+AuditResult
+│
+├── url
+├── audit_date
+├── pages_crawled
+├── site_score
+├── grade
+├── total_issues
+├── critical_count
+├── warning_count
+├── info_count
+├── pages
+├── issues
+└── safe_browsing
+```
+
+---
+
+# Example
+
+```python
+from seoextracthf import SEOExtract
+
+result = SEOExtract.audit("https://example.com")
+
+print(result.site_score)
+print(result.grade)
+print(result.safe_browsing)
+
+for issue in result.issues:
+    print(issue.issue_type)
+```
+
+---
+
+# Safe Browsing Result
+
+```python
+{
+    "is_safe": True,
+    "threats": [],
+    "error": None
+}
+```
+
+If Google reports a threat:
+
+```python
+{
+    "is_safe": False,
+    "threats": [
+        "MALWARE"
+    ],
+    "error": None
+}
+```
+
+SEOExtractHF immediately stops crawling unsafe websites.
+
+---
+
+# Current SEO Checks
+
+## Page Quality
+
+- Title validation
+- Meta description validation
+- H1 validation
+- Thin content detection
+
+## Technical SEO
+
+- Canonical tag
+- Viewport meta tag
+- Schema.org JSON-LD
+- HTTP status validation
+
+## Images
+
+- Missing ALT attributes
+
+## Links
+
+- Internal link analysis
+
+## Site-wide Checks
+
+- Duplicate titles
+- Duplicate meta descriptions
+
+## Security
+
+- Google Safe Browsing validation
+
+---
+
+# Example Output
+
+```python
+AuditResult(
+    site_score=91.0,
+    grade="A",
+    total_issues=4,
+    pages_crawled=15
+)
+```
+
+---
+
+# Project Structure
+
+```
+seoextracthf/
+│
+├── crawler.py
+├── parser.py
+├── rules.py
+├── scorer.py
+├── safe_browsing.py
+├── models.py
+└── __init__.py
+```
+
+---
+
+# Designed For
+
+SEOExtractHF is designed to be used inside:
+
+- AI SEO Agents
+- LangGraph workflows
+- FastAPI applications
+- Streamlit dashboards
+- Report generators
+- CI/CD quality checks
+- Data pipelines
+- SEO automation tools
+
+---
+
+# Dependencies
+
+- beautifulsoup4
+- lxml
+- requests
+- pydantic
+- python-dotenv
+
+---
+
+# License
+
+MIT License
+
+---
+
+# Author
+
+**Britto K**
+
+GitHub:
+
+https://github.com/Britto1221# seoextract
