@@ -33,7 +33,7 @@ Returns validated **Pydantic structured output** that can be directly consumed b
 # Installation
 
 ```bash
-pip install seoextracthf
+pip install seoextract
 ```
 
 or install from source
@@ -85,7 +85,7 @@ No additional code is required.
 Pass the API key manually.
 
 ```python
-from seoextracthf import SEOExtract
+from seoextract import SEOExtract
 
 result = SEOExtract.audit(
     "https://example.com",
@@ -137,7 +137,7 @@ AuditResult
 # Example
 
 ```python
-from seoextracthf import SEOExtract
+from seoextract import SEOExtract
 
 result = SEOExtract.audit("https://example.com")
 
@@ -173,7 +173,7 @@ If Google reports a threat:
 }
 ```
 
-SEOExtractHF immediately stops crawling unsafe websites.
+SEOExtract immediately stops crawling unsafe websites.
 
 ---
 
@@ -228,7 +228,7 @@ AuditResult(
 # Project Structure
 
 ```
-seoextracthf/
+seoextract/
 │
 ├── crawler.py
 ├── parser.py
@@ -243,7 +243,7 @@ seoextracthf/
 
 # Designed For
 
-SEOExtractHF is designed to be used inside:
+SEOExtract is designed to be used inside:
 
 - AI SEO Agents
 - LangGraph workflows
