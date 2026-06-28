@@ -80,5 +80,5 @@ class SEOExtract:
     
 
 if __name__ == "__main__":
-    result = SEOExtract.audit("https://rootpro.in/")
+    result = SEOExtract.audit("Your Website")
     print(result.model_dump_json(indent=2))
