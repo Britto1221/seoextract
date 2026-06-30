@@ -1,3 +1,3 @@
 from .init import SEOExtract
-
+__version__ = "0.1.2"
 __all__ = ["SEOExtract"]
