@@ -1,11 +1,17 @@
-from langchain_openai import ChatOpenai
-from dotenv import load_dotenv
-load_dotenv()
 import os
+from langchain_openai import ChatOpenAI
+
 
 def openai_provider():
-    return ChatOpenai(
-        model = "gpt4o-mini",
-        api_key = os.getenv("OPENAI_API_KEY"),
-        temperature = 0
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key:
+        raise ValueError(
+            "OPENAI_API_KEY not found. Add it to your .env file or environment variables."
+        )
+
+    return ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0,
+        api_key=api_key,
     )
