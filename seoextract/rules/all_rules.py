@@ -7,14 +7,17 @@ from technical_rules import technical_rules
 from link_rules import link_rules
 from image_rules import image_rules
 from seoextract.llm import openai_provider
+from overall_rules import overall_rules
 def detect_issues(pages: list[PageData]) -> list[SEOIssue]:
     issues = []
     llm = openai_provider()
-    issues.extend(meta_rules(pages, llm))
-    issues.extend(title_rules(pages, llm))
-    issues.extend(heading_rules(pages, llm))
-    issues.extend(content_rules(pages, llm))
-    issues.extend(technical_rules(pages, llm))
-    issues.extend(link_rules(pages, llm))
-    issues.extend(image_rules(pages, llm))
+    for page in pages:
+        issues.extend(meta_rules(page, llm))
+        issues.extend(title_rules(page, llm))
+        issues.extend(heading_rules(page, llm))
+        issues.extend(content_rules(page, llm))
+        issues.extend(technical_rules(page, llm))
+        issues.extend(link_rules(page, llm))
+        issues.extend(image_rules(page, llm))
+        issues.extend(overall_rules(page, llm))
     return issues
