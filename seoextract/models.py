@@ -1,5 +1,21 @@
 from pydantic import BaseModel, Field
 
+class AuditIssue(BaseModel):
+    category: str = ""
+    title: str = ""
+    severity: str = "INFO"
+    reason: str = ""
+    recommendation: str = ""
+
+
+class PageAudit(BaseModel):
+    page_url: str = ""
+    page_score: float = 0.0
+    grade: str = "F"
+    summary: str = ""
+    issues: list[AuditIssue] = Field(default_factory=list)
+    strengths: list[str] = Field(default_factory=list)
+    priority_actions: list[str] = Field(default_factory=list)
 
 class PageData(BaseModel):
     url: str
@@ -64,4 +80,4 @@ class AuditResult(BaseModel):
     info_count: int
 
     pages: list[PageData] = Field(default_factory=list)
-    page_audits: list[dict] = Field(default_factory=list)
+    page_audits: list[PageAudit] = Field(default_factory=list)

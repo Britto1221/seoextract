@@ -5,9 +5,17 @@ from urllib.robotparser import RobotFileParser
 import requests
 from bs4 import BeautifulSoup
 
-HEADERS = {"User-Agent": "SEOExtractHF/1.0 (+https://github.com/Britto1221/seoextracthf)"}
-TIMEOUT = 10
-
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+TIMEOUT = 20
+BOT_NAME = "SEOExtract"
 
 def _base(url: str) -> str:
     parsed = urlparse(url if urlparse(url).scheme else f"https://{url}")
@@ -74,7 +82,7 @@ def crawl(seed_url: str, max_pages: int = 20) -> list[dict]:
             if url in visited:
                 continue
             visited.add(url)
-            if robots and not robots.can_fetch(HEADERS["User-Agent"], url):
+            if robots and not robots.can_fetch(BOT_NAME, url):
                 continue
 
             result = fetch_page(url, session)

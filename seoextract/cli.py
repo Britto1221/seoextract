@@ -26,10 +26,10 @@ def audit(
 
     print("\n[bold]Top Page Audits[/bold]")
     for audit_result in result.page_audits:
-        print(f"\n[cyan]{audit_result['page_url']}[/cyan]")
-        print(f"Score: {audit_result['page_score']}")
-        print(f"Grade: {audit_result['grade']}")
-        print(f"Summary: {audit_result['summary']}")
+        print(f"\n[cyan]{audit_result.page_url}[/cyan]")
+        print(f"Score: {audit_result.page_score}")
+        print(f"Grade: {audit_result.grade}")
+        print(f"Summary: {audit_result.summary}")
 
 
 @app.command()

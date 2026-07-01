@@ -24,6 +24,19 @@ Evaluate:
 - Overall technical SEO
 - Overall user experience
 
+Scoring guide:
+- 90–100 = Excellent SEO. Strong metadata, content, structure, links, and technical setup.
+- 75–89 = Good SEO. Minor improvements needed.
+- 60–74 = Average SEO. Several issues, but page is usable and indexable.
+- 40–59 = Weak SEO. Major improvements needed, but page is still accessible.
+- 20–39 = Poor SEO. Severe SEO weaknesses.
+- 0–19 = Critical failure. Use only if the page is inaccessible, blocked, empty, broken, unsafe, or cannot be analyzed.
+
+If the page is accessible and contains readable HTML content, the page_score should usually be above 20.
+
+Important scoring rule:
+Do not assign 0 unless the page cannot be accessed, has no readable content, or the audit fails.
+
 Return JSON in this exact structure:
 
 {{
@@ -61,4 +74,33 @@ Rules:
 - Do not include markdown.
 - Do not include explanations outside JSON.
 - If there are no serious issues, keep issues as an empty list.
+"""
+
+def site_context_prompt(homepage_data: dict) -> str:
+    return f"""
+You are an SEO strategist.
+
+Analyze this homepage data and identify the website's business context.
+
+Homepage Data:
+{homepage_data}
+
+Return ONLY valid JSON in this structure:
+
+{{
+  "brand_name": "",
+  "domain": "",
+  "business_type": "",
+  "industry": "",
+  "target_audience": "",
+  "products_or_services": [],
+  "geographic_focus": "",
+  "main_business_goal": "",
+  "seo_opportunities": []
+}}
+
+Rules:
+- Return JSON only.
+- Do not include markdown.
+- If something is unknown, use an empty string or empty list.
 """
