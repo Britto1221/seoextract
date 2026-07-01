@@ -27,13 +27,6 @@ class IssueType(str, Enum):
     POOR_INTERNAL_LINKING = "Poor Internal Linking"
     NO_SCHEMA = "No Schema Markup"
 
-
-class SafeBrowsingResult(BaseModel):
-    is_safe: bool | None = None
-    threats: list[str] = Field(default_factory=list)
-    error: str | None = None
-
-
 class SEOIssue(BaseModel):
     page_url: str
     issue_type: IssueType
