@@ -2,9 +2,11 @@
 
 <div align="center">
 
-**A lightweight Python SEO audit engine with built-in Google Safe Browsing support.**
+# AI-Powered SEO Audit Engine for Python
 
-Returns validated **Pydantic structured output** that can be directly consumed by AI agents, dashboards, APIs, report generators, and automation pipelines.
+Analyze websites using Large Language Models and receive structured, page-level SEO audits with actionable recommendations.
+
+Built for developers, AI agents, automation pipelines, dashboards, and SEO applications.
 
 </div>
 
@@ -12,21 +14,24 @@ Returns validated **Pydantic structured output** that can be directly consumed b
 
 ## Features
 
+- AI-powered SEO auditing
 - Website crawler
-- Google Safe Browsing validation
-- Technical SEO auditing
-- Pydantic structured output
-- Page-level SEO metrics
-- Site-level SEO scoring
-- Severity-based issue detection
-- Duplicate title detection
-- Duplicate meta description detection
+- Multi-page website analysis
+- Technical SEO analysis
+- Content quality evaluation
+- Heading structure analysis
+- Meta title & description analysis
+- Internal & external link analysis
+- Image SEO analysis
+- Schema.org detection
+- Open Graph detection
 - Canonical tag detection
 - Viewport detection
-- Schema.org detection
-- Image alt-text validation
-- Internal linking analysis
-- Thin content detection
+- Structured JSON output
+- Pydantic models
+- Page-level scoring
+- Site-level scoring
+- AI-generated recommendations
 
 ---
 
@@ -36,7 +41,7 @@ Returns validated **Pydantic structured output** that can be directly consumed b
 pip install seoextract
 ```
 
-or install from source
+or
 
 ```bash
 pip install -e .
@@ -47,53 +52,19 @@ pip install -e .
 # Requirements
 
 - Python 3.10+
-- Google Safe Browsing API Key
+- OpenAI API Key
 
 ---
 
-# Google Safe Browsing Setup
-
-SEOExtract checks every website against Google's Safe Browsing service **before crawling**.
-
-If Google reports the website as unsafe, crawling is stopped automatically.
-
-If no Google Safe Browsing API key is provided, safe_browsing.is_safe will be None.
----
-
-## Option 1 (Recommended)
+# API Key Setup
 
 Create a `.env` file.
 
-```text
-.env
-```
-
-Add your API key.
-
 ```env
-GOOGLE_SAFE_BROWSING_API_KEY=YOUR_API_KEY
+OPENAI_API_KEY=your_api_key
 ```
 
 SEOExtract automatically loads the API key.
-
-No additional code is required.
-
----
-
-## Option 2
-
-Pass the API key manually.
-
-```python
-from seoextract import SEOExtract
-
-result = SEOExtract.audit(
-    "https://example.com",
-    safe_browsing_api_key="YOUR_API_KEY"
-)
-```
-
-When an API key is supplied manually, the `.env` file is **not used**.
 
 ---
 
@@ -106,14 +77,15 @@ result = SEOExtract.audit(
     "https://example.com"
 )
 
-print(result.model_dump_json(indent=2))
+print(result.site_score)
+print(result.grade)
 ```
 
 ---
 
-# Returned Object
+# Output
 
-SEOExtract returns a validated Pydantic model.
+SEOExtract returns an `AuditResult`.
 
 ```text
 AuditResult
@@ -128,8 +100,21 @@ AuditResult
 ├── warning_count
 ├── info_count
 ├── pages
-├── issues
-└── safe_browsing
+└── page_audits
+```
+
+Each page audit contains:
+
+```text
+Page Audit
+│
+├── page_url
+├── page_score
+├── grade
+├── summary
+├── strengths
+├── priority_actions
+└── issues
 ```
 
 ---
@@ -142,84 +127,75 @@ from seoextract import SEOExtract
 result = SEOExtract.audit("https://example.com")
 
 print(result.site_score)
-print(result.grade)
-print(result.safe_browsing)
 
-for issue in result.issues:
-    print(issue.issue_type)
+for page in result.page_audits:
+    print(page["page_url"])
+    print(page["page_score"])
+    print(page["summary"])
 ```
 
 ---
 
-# Safe Browsing Result
+# What SEOExtract Evaluates
 
-```python
-{
-    "is_safe": True,
-    "threats": [],
-    "error": None
-}
-```
+### Content
 
-If Google reports a threat:
+- Content quality
+- Search intent alignment
+- Readability
+- Content depth
+- Value proposition
 
-```python
-{
-    "is_safe": False,
-    "threats": [
-        "MALWARE"
-    ],
-    "error": None
-}
-```
+### Metadata
 
-SEOExtract immediately stops crawling unsafe websites.
+- Page title
+- Meta description
+- Open Graph metadata
 
----
+### Headings
 
-# Current SEO Checks
+- Heading hierarchy
+- Heading clarity
+- Heading relevance
 
-## Page Quality
+### Images
 
-- Title validation
-- Meta description validation
-- H1 validation
-- Thin content detection
+- Missing ALT text
+- Image relevance
+- Image optimization suggestions
 
-## Technical SEO
+### Links
 
-- Canonical tag
+- Internal linking
+- External linking
+- Anchor text quality
+
+### Technical SEO
+
+- Canonical tags
 - Viewport meta tag
-- Schema.org JSON-LD
-- HTTP status validation
+- Robots meta tag
+- Schema markup
+- Mobile readiness
+- Overall technical quality
 
-## Images
+### Overall
 
-- Missing ALT attributes
-
-## Links
-
-- Internal link analysis
-
-## Site-wide Checks
-
-- Duplicate titles
-- Duplicate meta descriptions
-
-## Security
-
-- Google Safe Browsing validation
+- Page SEO score
+- Overall grade
+- AI-generated recommendations
+- Priority fixes
 
 ---
 
-# Example Output
+# Example Result
 
 ```python
 AuditResult(
-    site_score=91.0,
+    site_score=92.5,
     grade="A",
-    total_issues=4,
-    pages_crawled=15
+    pages_crawled=8,
+    total_issues=17
 )
 ```
 
@@ -227,32 +203,36 @@ AuditResult(
 
 # Project Structure
 
-```
+```text
 seoextract/
 │
+├── __init__.py
+├── auditor.py
 ├── crawler.py
 ├── parser.py
-├── rules.py
-├── scorer.py
-├── safe_browsing.py
+├── prompts.py
+├── llm.py
 ├── models.py
-└── __init__.py
+├── utils.py
+└── reports/
 ```
 
 ---
 
 # Designed For
 
-SEOExtract is designed to be used inside:
+SEOExtract is ideal for:
 
 - AI SEO Agents
-- LangGraph workflows
+- SEO automation
 - FastAPI applications
+- LangGraph workflows
+- LangChain applications
 - Streamlit dashboards
-- Report generators
 - CI/CD quality checks
-- Data pipelines
-- SEO automation tools
+- Report generators
+- AI assistants
+- Python automation
 
 ---
 
@@ -263,6 +243,20 @@ SEOExtract is designed to be used inside:
 - requests
 - pydantic
 - python-dotenv
+- langchain-openai
+
+---
+
+# Roadmap
+
+- PDF reports
+- Excel reports
+- JSON export
+- Custom LLM providers
+- Local LLM support
+- Batch website auditing
+- Audit comparison
+- Plugin architecture
 
 ---
 
@@ -277,5 +271,4 @@ MIT License
 **Britto K**
 
 GitHub:
-
-https://github.com/Britto1221# seoextract
+https://github.com/Britto1221
