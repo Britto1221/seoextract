@@ -37,22 +37,26 @@ class SEOIssue(BaseModel):
 
 class PageData(BaseModel):
     url: str
-    status_code: int
     response_time_ms: float
     final_url: str | None = None
     title: str | None = None
     title_length: int = 0
+    text: str = ""
     meta_description: str | None = None
     meta_description_length: int = 0
-    robots_meta: str | None = None
-    viewport: str | None = None
     canonical: str | None = None
     h1_tags: list[str] = Field(default_factory=list)
     h2_tags: list[str] = Field(default_factory=list)
     h3_tags: list[str] = Field(default_factory=list)
+    h4_tags: list[str] = Field(default_factory=list)
+    h5_tags: list[str] = Field(default_factory=list)
+    h6_tags: list[str] = Field(default_factory=list)
     h1_count: int = 0
     h2_count: int = 0
     h3_count: int = 0
+    h4_count: int = 0
+    h5_count: int = 0
+    h6_count: int = 0
     word_count: int = 0
     total_images: int = 0
     images_missing_alt: int = 0
@@ -78,4 +82,4 @@ class AuditResult(BaseModel):
     info_count: int
     pages: list[PageData] = Field(default_factory=list)
     issues: list[SEOIssue] = Field(default_factory=list)
-    safe_browsing: SafeBrowsingResult
+

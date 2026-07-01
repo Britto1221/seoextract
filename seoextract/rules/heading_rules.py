@@ -1,6 +1,6 @@
 from seoextract.models import PageData
 from seoextract.prompts import heading_prompt
-import json
+from seoextract.utils import parse_llm_json
 def heading_rules(page: PageData, llm):
     headings = {
         "h1": page.h1_tags or [],
@@ -16,5 +16,5 @@ def heading_rules(page: PageData, llm):
         page_text
     )
     response = llm.invoke(query)
-    result = json.loads(response.content)
+    result = parse_llm_json(response.content)
     return result

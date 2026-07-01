@@ -1,6 +1,6 @@
 from seoextract.models import PageData
 from seoextract.prompts import meta_description_prompt
-import json
+from seoextract.utils import parse_llm_json
 def meta_rules(page: PageData, llm):
     meta_description = page.meta_description or ""
     page_text = page.text or ""
@@ -9,5 +9,5 @@ def meta_rules(page: PageData, llm):
         page_text
     )
     response = llm.invoke(query)
-    result = json.loads(response.content)
+    result = parse_llm_json(response.content)
     return result

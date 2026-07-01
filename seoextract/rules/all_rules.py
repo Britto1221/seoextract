@@ -8,16 +8,18 @@ from link_rules import link_rules
 from image_rules import image_rules
 from seoextract.llm import openai_provider
 from overall_rules import overall_rules
-def detect_issues(pages: list[PageData]) -> list[SEOIssue]:
+def detect_issues(pages: list[PageData]) -> list[dict]:
     issues = []
     llm = openai_provider()
+
     for page in pages:
-        issues.extend(meta_rules(page, llm))
-        issues.extend(title_rules(page, llm))
-        issues.extend(heading_rules(page, llm))
-        issues.extend(content_rules(page, llm))
-        issues.extend(technical_rules(page, llm))
-        issues.extend(link_rules(page, llm))
-        issues.extend(image_rules(page, llm))
-        issues.extend(overall_rules(page, llm))
+        issues.append(meta_rules(page, llm))
+        issues.append(title_rules(page, llm))
+        issues.append(heading_rules(page, llm))
+        issues.append(content_rules(page, llm))
+        issues.append(technical_rules(page, llm))
+        issues.append(link_rules(page, llm))
+        issues.append(image_rules(page, llm))
+        issues.append(overall_rules(page, llm))
+
     return issues
