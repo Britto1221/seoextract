@@ -1,6 +1,6 @@
 [project]
 name = "seoextract"
-version = "0.2.0"
+version = "0.3.0"
 description = "A lightweight Python SEO audit engine that returns Pydantic structured output."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,7 +13,6 @@ dependencies = [
     "requests",
     "pydantic",
     "python-dotenv",
-    "langchain-openai",
     "typer",
     "rich"
 ]

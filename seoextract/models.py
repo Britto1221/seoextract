@@ -1,21 +1,40 @@
+from enum import Enum
 from pydantic import BaseModel, Field
 
-class AuditIssue(BaseModel):
-    category: str = ""
-    title: str = ""
-    severity: str = "INFO"
-    reason: str = ""
-    recommendation: str = ""
+
+class Severity(str, Enum):
+    CRITICAL = "CRITICAL"
+    WARNING = "WARNING"
+    INFO = "INFO"
 
 
-class PageAudit(BaseModel):
-    page_url: str = ""
-    page_score: float = 0.0
-    grade: str = "F"
-    summary: str = ""
-    issues: list[AuditIssue] = Field(default_factory=list)
-    strengths: list[str] = Field(default_factory=list)
-    priority_actions: list[str] = Field(default_factory=list)
+class IssueType(str, Enum):
+    MISSING_VIEWPORT = "Missing Viewport Meta Tag"
+    MISSING_TITLE = "Missing Title"
+    TITLE_TOO_SHORT = "Title Too Short"
+    TITLE_TOO_LONG = "Title Too Long"
+    DUPLICATE_TITLE = "Duplicate Title"
+    MISSING_META = "Missing Meta Description"
+    META_TOO_SHORT = "Meta Description Too Short"
+    META_TOO_LONG = "Meta Description Too Long"
+    DUPLICATE_META = "Duplicate Meta Description"
+    MISSING_H1 = "Missing H1 Tag"
+    MULTIPLE_H1 = "Multiple H1 Tags"
+    THIN_CONTENT = "Thin Content"
+    MISSING_ALT_TEXT = "Missing Image Alt Text"
+    MISSING_CANONICAL = "Missing Canonical Tag"
+    POOR_INTERNAL_LINKING = "Poor Internal Linking"
+    NO_SCHEMA = "No Schema Markup"
+    PAGE_INACCESSIBLE = "Page Inaccessible"
+
+
+class SEOIssue(BaseModel):
+    page_url: str
+    issue_type: IssueType
+    severity: Severity
+    current_value: str = ""
+    suggestion: str
+
 
 class PageData(BaseModel):
     url: str
@@ -65,6 +84,7 @@ class PageData(BaseModel):
     og_description: str | None = None
 
     page_score: float = 0.0
+    page_issues_count: int = 0
 
 
 class AuditResult(BaseModel):
@@ -80,4 +100,4 @@ class AuditResult(BaseModel):
     info_count: int
 
     pages: list[PageData] = Field(default_factory=list)
-    page_audits: list[PageAudit] = Field(default_factory=list)
+    issues: list[SEOIssue] = Field(default_factory=list)

@@ -1,17 +1,14 @@
 import typer
 from rich import print
+
 from seoextract import SEOExtract, __version__
 
 app = typer.Typer()
 
 
 @app.command()
-def audit(
-    url: str,
-    max_pages: int = 20,
-):
-    """Run an AI-powered SEO audit."""
-
+def audit(url: str, max_pages: int = 20):
+    """Run a rule-based SEO audit."""
     result = SEOExtract.audit(url=url, max_pages=max_pages)
 
     print("\n[bold green]SEO Audit Complete[/bold green]")
@@ -24,12 +21,23 @@ def audit(
     print(f"Warnings: {result.warning_count}")
     print(f"Info: {result.info_count}")
 
-    print("\n[bold]Top Page Audits[/bold]")
-    for audit_result in result.page_audits:
-        print(f"\n[cyan]{audit_result.page_url}[/cyan]")
-        print(f"Score: {audit_result.page_score}")
-        print(f"Grade: {audit_result.grade}")
-        print(f"Summary: {audit_result.summary}")
+    if result.pages:
+        print("\n[bold]Page Scores[/bold]")
+        for page in result.pages:
+            print(f"\n[cyan]{page.url}[/cyan]")
+            print(f"Score: {page.page_score}")
+            print(f"Status: {page.status_code}")
+            print(f"Title: {page.title or 'N/A'}")
+
+    if result.issues:
+        print("\n[bold]Detected Issues[/bold]")
+        for issue in result.issues[:20]:
+            print(f"\n[yellow]{issue.issue_type.value}[/yellow]")
+            print(f"Page: {issue.page_url}")
+            print(f"Severity: {issue.severity.value}")
+            if issue.current_value:
+                print(f"Current value: {issue.current_value}")
+            print(f"Fix: {issue.suggestion}")
 
 
 @app.command()

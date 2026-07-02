@@ -1,7 +1,7 @@
-import json
 from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
+
 from .models import PageData
 
 
@@ -18,13 +18,23 @@ def _unique(items: list[str]) -> list[str]:
     return list(dict.fromkeys(items))
 
 
+def _normalize_url(url: str) -> str:
+    parsed = urlparse(url)
+    path = parsed.path or "/"
+
+    if path != "/" and path.endswith("/"):
+        path = path.rstrip("/")
+
+    return parsed._replace(fragment="", path=path).geturl()
+
+
 def parse(fetch_result: dict) -> PageData:
     url = fetch_result["url"]
     final_url = fetch_result.get("final_url", url)
 
     page = {
-        "url": url,
-        "final_url": final_url,
+        "url": _normalize_url(url),
+        "final_url": _normalize_url(final_url),
         "status_code": fetch_result.get("status_code", 0),
         "response_time_ms": fetch_result.get("response_time_ms", 0),
     }
@@ -41,7 +51,7 @@ def parse(fetch_result: dict) -> PageData:
 
     canonical_tag = soup.find("link", attrs={"rel": lambda r: r and "canonical" in r})
     canonical = (
-        canonical_tag["href"].strip()
+        _normalize_url(urljoin(final_url, canonical_tag["href"].strip()))
         if canonical_tag and canonical_tag.get("href")
         else None
     )
@@ -63,22 +73,19 @@ def parse(fetch_result: dict) -> PageData:
 
     for tag in soup.find_all("a", href=True):
         href = tag["href"].strip()
-
         if not href or href.startswith(("#", "mailto:", "tel:")):
             continue
 
-        full_url = urljoin(final_url, href)
-
+        full_url = _normalize_url(urljoin(final_url, href))
         if urlparse(full_url).netloc == base_domain:
             internal_links.append(full_url)
         else:
             external_links.append(full_url)
 
     image_tags = soup.find_all("img")
-
     image_data = [
         {
-            "src": urljoin(final_url, img.get("src", "")),
+            "src": _normalize_url(urljoin(final_url, img.get("src", ""))),
             "alt": img.get("alt", "").strip(),
             "filename": img.get("src", "").split("/")[-1],
         }
